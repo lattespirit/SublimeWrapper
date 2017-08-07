@@ -132,7 +132,7 @@ class ActivateWrapCommand(sublime_plugin.WindowCommand):
                 if syntax == active_syntax:
                     self.chosen_wrappers = wrapper
                     return True
-        return False
+        # return False  # None is falsy as well, no need for explicit False
 
     def on_done(self, index):
         # Panel Canceled
@@ -183,7 +183,7 @@ class WrapCommand(sublime_plugin.TextCommand):
             if wrapper[0]:
                 begin_line_match = self.view.find(
                     '[^\t\s]+', begin_line.begin())
-                tab_and_space = 'sublime_wrapper.py'
+                tab_and_space = ''
                 if begin_line_match:
                     tab_and_space = self.view.substr(sublime.Region(
                         begin_line.begin(), begin_line_match.begin()))
@@ -194,7 +194,7 @@ class WrapCommand(sublime_plugin.TextCommand):
         body_regions = self.view.get_regions('BODY_REGIONS')
         self.view.sel().clear()
         self.view.sel().add_all(body_regions)
-        self.view.run_command('indent')
+        self.view.run_command('indent')  # ???
         self.view.erase_regions('BODY_REGIONS')
 
         # Store all defined positions(${1}, ${2}, etc.) in the defined content
@@ -212,7 +212,7 @@ class WrapCommand(sublime_plugin.TextCommand):
 
         order_defined_regions = self.view.find_all('\$\{\d+\}', 0)
         if positions:
-            Vars.all_pos_row_cols
+            Vars.all_pos_row_cols = []
             for defined_regions in positions:
                 pos_row_cols = []
                 for defined_region in defined_regions:
